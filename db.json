@@ -1,0 +1,80 @@
+{
+  "users": [
+    {
+      "id": "ab65",
+      "name": "Jovan",
+      "surname": "Tone"
+    },
+    {
+      "id": "e7da",
+      "name": "Prohor",
+      "surname": "Muchev"
+    },
+    {
+      "id": "efdf",
+      "name": "Tristan",
+      "surname": "Beason"
+    },
+    {
+      "id": "1cc4",
+      "name": "Matej",
+      "surname": "Plavevski"
+    }
+  ],
+  "movies": [
+    {
+      "id": "fb2e",
+      "title": "Batman",
+      "description": "Vigilante saves Gotham City from danger",
+      "rating": "9",
+      "userId": "e7da"
+    },
+    {
+      "id": "f52d",
+      "title": "Thor",
+      "description": "His hammer is heavy",
+      "rating": "5",
+      "userId": "1cc4"
+    },
+    {
+      "id": "708c",
+      "title": "Spiderman",
+      "description": "Friendly neighborhood webslinger",
+      "rating": "7",
+      "userId": "efdf"
+    },
+    {
+      "id": "be97",
+      "title": "Mario",
+      "description": "He jumps on goombas",
+      "rating": "10",
+      "userId": "ab65"
+    }
+  ],
+  "comments": [
+    {
+      "id": "4e23",
+      "text": "My childhood is complete",
+      "movieId": "be97",
+      "userId": "ab65"
+    },
+    {
+      "id": "6e26",
+      "text": "Nostalgic, but that's all its got going for it",
+      "movieId": "708c",
+      "userId": "efdf"
+    },
+    {
+      "id": "c9a6",
+      "text": "The CGI was awful",
+      "movieId": "f52d",
+      "userId": "1cc4"
+    },
+    {
+      "id": "de50",
+      "text": "Literally me",
+      "movieId": "fb2e",
+      "userId": "e7da"
+    }
+  ]
+}
