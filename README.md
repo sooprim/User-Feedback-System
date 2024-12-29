@@ -7,10 +7,10 @@ This project was made with Next.js, which is a react-based web application, alon
 First, you will want to install the necessary dependencies:
 
 ```bash
+npm install -g json-server
 npm install next@latest react@latest react-dom@latest
 ```
-
-Then, you will run in one gitbash terminal:
+Depending on your PC, you might need to install more dependencies. Then, you will run in one gitbash terminal:
 ```bash
 npm run server
 ```
