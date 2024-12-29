@@ -1,6 +1,6 @@
 ## User Feedback System
 
-This project was made with Next.js, which is a react-based web application, alongside using JSON server which simulates a backend.
+This project was made with Next.js, which is a react-based web application that also utilizes bootstrap, alongside using JSON server which simulates a backend.
 
 ## Getting Started
 
