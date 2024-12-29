@@ -14,7 +14,7 @@ Depending on your PC, you might need to install more dependencies. Then, you wil
 ```bash
 npm run server
 ```
-This is to have the JSON server up and running on port 5618 (my student ID).
+This is to have the JSON server up and running on port 5618.
 Then, you will run in another gitbash terminal:
 ```bash
 npm run dev
