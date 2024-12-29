@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import Image from 'next/image'
 
 interface Movie {
   id: string
@@ -9,6 +10,7 @@ interface Movie {
   description: string
   rating: number
   userId: string
+  imageUrl?: string
 }
 
 interface User {
@@ -19,7 +21,7 @@ interface User {
 
 export default function MovieList() {
   const [movies, setMovies] = useState<Movie[]>([])
-  const [newMovie, setNewMovie] = useState({ title: '', description: '', rating: 1, userId: '' })
+  const [newMovie, setNewMovie] = useState({ title: '', description: '', rating: 1, userId: '', imageUrl: '' })
   const [editingMovie, setEditingMovie] = useState<Movie | null>(null)
   const [users, setUsers] = useState<User[]>([])
 
@@ -66,18 +68,20 @@ export default function MovieList() {
       if (editingMovie) {
         const updatedMovie = {
           ...editingMovie,
-          userId: editingMovie.userId
+          userId: editingMovie.userId,
+          imageUrl: editingMovie.imageUrl,
         }
         await axios.put(`http://localhost:5618/movies/${editingMovie.id}`, updatedMovie)
         setEditingMovie(null)
       } else {
         const movieToCreate = {
           ...newMovie,
-          userId: newMovie.userId
+          userId: newMovie.userId,
+          imageUrl: newMovie.imageUrl,
         }
         await axios.post('http://localhost:5618/movies', movieToCreate)
       }
-      setNewMovie({ title: '', description: '', rating: 1, userId: '' })
+      setNewMovie({ title: '', description: '', rating: 1, userId: '', imageUrl: '' })
       fetchMovies()
     } catch (error) {
       console.error('Error saving movie:', error)
@@ -104,6 +108,21 @@ export default function MovieList() {
   const getUserName = (userId: string) => {
     const user = users.find(u => u.id === userId)
     return user ? `${user.name} ${user.surname}` : 'Unknown User'
+  }
+
+  const getMovieImage = (title: string) => {
+    switch (title.toLowerCase()) {
+      case 'mario':
+        return '/Mario-Icon.png'
+      case 'thor':
+        return '/Thor-Icon.png'
+      case 'batman':
+        return '/Batman-Icon.png'
+      case 'spiderman':
+        return '/Spiderman-Icon.png'
+      default:
+        return '/default-icon.png' // A default icon if no match is found
+    }
   }
 
   return (
@@ -152,6 +171,14 @@ export default function MovieList() {
             </option>
           ))}
         </select>
+        <input
+          type="text"
+          name="imageUrl"
+          value={editingMovie ? editingMovie.imageUrl : newMovie.imageUrl}
+          onChange={handleInputChange}
+          placeholder="Image Destination (Optional)"
+          className="w-full"
+        />
         <div className="flex justify-between">
           <button type="submit" className="btn">
             {editingMovie ? 'Update Movie' : 'Add Movie'}
@@ -166,10 +193,19 @@ export default function MovieList() {
       <ul className="space-y-4">
         {movies.map((movie) => (
           <li key={movie.id} className="flex justify-between items-center bg-white dark:bg-gray-700 p-4 rounded-lg shadow">
-            <div>
-              <h3 className="text-lg font-semibold">{movie.title}</h3>
-              <p>{movie.description}</p>
-              <p>Rating: {movie.rating}/10 ({getUserName(movie.userId)})</p>
+            <div className="flex items-center">
+              <Image
+                src={getMovieImage(movie.title)}
+                alt={`${movie.title} icon`}
+                width={50}
+                height={50}
+                className="mr-4 rounded"
+              />
+              <div>
+                <h3 className="text-lg font-semibold">{movie.title}</h3>
+                <p>{movie.description}</p>
+                <p>Rating: {movie.rating}/10 ({getUserName(movie.userId)})</p>
+              </div>
             </div>
             <div>
               <button onClick={() => handleEdit(movie)} className="btn bg-yellow-500 mr-2">Edit</button>
