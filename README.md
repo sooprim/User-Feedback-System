@@ -15,7 +15,7 @@ Then, you will run in one gitbash terminal:
 npm run server
 ```
 This is to have the JSON server up and running on port 5618 (my student ID).
-Then, you will run in the other gitbash terminal:
+Then, you will run in another gitbash terminal:
 ```bash
 npm run dev
 ```
