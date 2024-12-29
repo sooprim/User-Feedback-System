@@ -44,21 +44,15 @@
       "userId": "efdf"
     },
     {
-      "image": "mario-icon.png",
-      "id": "be97",
       "title": "Mario",
       "description": "He jumps on goombas",
       "rating": "10",
-      "userId": "ab65"
+      "userId": "ab65",
+      "imageUrl": "/Mario-Icon.png",
+      "id": "mH1JuYN"
     }
   ],
   "comments": [
-    {
-      "id": "4e23",
-      "text": "My childhood is complete",
-      "movieId": "be97",
-      "userId": "ab65"
-    },
     {
       "id": "6e26",
       "text": "Nostalgic, but that's all its got going for it",

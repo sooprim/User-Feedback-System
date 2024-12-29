@@ -110,18 +110,22 @@ export default function MovieList() {
     return user ? `${user.name} ${user.surname}` : 'Unknown User'
   }
 
-  const getMovieImage = (title: string) => {
+  const getMovieImage = (title: string, imageUrl: string) => {
+    if (imageUrl) {
+      return imageUrl; // Return custom image URL if provided
+    }
+    // Fallback logic based on movie title
     switch (title.toLowerCase()) {
       case 'mario':
-        return '/Mario-Icon.png'
+        return '/Mario-Icon.png'; // Default Mario image
       case 'thor':
-        return '/Thor-Icon.png'
+        return '/Thor-Icon.png';
       case 'batman':
-        return '/Batman-Icon.png'
+        return '/Batman-Icon.png';
       case 'spiderman':
-        return '/Spiderman-Icon.png'
+        return '/Spiderman-Icon.png';
       default:
-        return '/default-icon.png' // A default icon if no match is found
+        return '/default-icon.png'; // Default fallback icon
     }
   }
 
@@ -146,17 +150,21 @@ export default function MovieList() {
           className="w-full"
           required
         />
-        <input
-          type="number"
-          name="rating"
-          value={editingMovie ? editingMovie.rating : newMovie.rating}
-          onChange={handleInputChange}
-          placeholder="Rating"
-          className="w-full"
-          min="1"
-          max="10"
-          required
-        />
+        <div className="flex items-center space-x-4">
+          <label htmlFor="rating" className="text-lg text-gray-500">Rating</label>
+          <input
+            type="number"
+            name="rating"
+            value={editingMovie ? editingMovie.rating : newMovie.rating}
+            onChange={handleInputChange}
+            id="rating"
+            className="w-20"
+            min="1"
+            max="10"
+            step="0.5"
+            required
+          />
+        </div>
         <select
           name="userId"
           value={editingMovie ? editingMovie.userId : newMovie.userId}
@@ -176,7 +184,7 @@ export default function MovieList() {
           name="imageUrl"
           value={editingMovie ? editingMovie.imageUrl : newMovie.imageUrl}
           onChange={handleInputChange}
-          placeholder="Image Destination (Optional)"
+          placeholder="Image URL (ex: /Mario-Icon.png)"
           className="w-full"
         />
         <div className="flex justify-between">
@@ -195,7 +203,7 @@ export default function MovieList() {
           <li key={movie.id} className="flex justify-between items-center bg-white dark:bg-gray-700 p-4 rounded-lg shadow">
             <div className="flex items-center">
               <Image
-                src={getMovieImage(movie.title)}
+                src={getMovieImage(movie.title, movie.imageUrl || '')}  // Pass the image URL here
                 alt={`${movie.title} icon`}
                 width={50}
                 height={50}
