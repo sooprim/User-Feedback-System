@@ -7,6 +7,7 @@ This project was made with Next.js, which is a react-based web application that 
 First, you will want to install the necessary dependencies:
 
 ```bash
+npm install
 npm install -g json-server
 npm install next@latest react@latest react-dom@latest
 ```
