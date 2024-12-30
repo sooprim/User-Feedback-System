@@ -49,22 +49,14 @@
       "description": "He jumps on goombas",
       "rating": "10",
       "userId": "ab65",
-      "imageUrl": "/Mario-Icon.png",
+      "imageUrl": "/mario.png",
       "id": "mH1JuYN"
-    },
-    {
-      "title": "new",
-      "description": "movie",
-      "rating": 1,
-      "userId": "ab65",
-      "imageUrl": "",
-      "id": "KkiWKZu"
     }
   ],
   "comments": [
     {
       "id": "6e26",
-      "text": "This was very nostalgic",
+      "text": "nostalgic!",
       "movieId": "708c",
       "userId": "efdf"
     },

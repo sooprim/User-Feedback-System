@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import Image from 'next/image'
 
 interface Comment {
   id: string
@@ -130,11 +131,18 @@ export default function CommentList() {
           name="text"
           value={editingComment ? editingComment.text : newComment.text}
           onChange={handleInputChange}
-          placeholder="Comment"
-          className="w-full"
+          placeholder="Comment (max 250 characters)"
+          className="w-full resize-none"
           rows={3}
+          maxLength={250}
           required
         />
+        <div className="text-right text-sm text-gray-500">
+          {editingComment
+            ? editingComment.text.length
+            : newComment.text.length}{' '}
+          / 250
+        </div>
         <select
           name="movieId"
           value={editingComment ? editingComment.movieId : newComment.movieId}
@@ -176,12 +184,25 @@ export default function CommentList() {
       </form>
       <ul className="space-y-4">
         {comments.map((comment) => (
-          <li key={comment.id} className="flex justify-between items-center bg-white dark:bg-gray-700 p-4 rounded-lg shadow">
-            <span>
-              {getUserName(comment.userId)} on {getMovieTitle(comment.movieId)} - "{comment.text}"
-            </span>
-            <div>
-              <button onClick={() => handleEdit(comment)} className="btn bg-yellow-500 mr-2">Edit</button>
+          <li
+            key={comment.id}
+            className="flex justify-between items-start bg-white dark:bg-gray-700 p-4 rounded-lg shadow"
+          >
+            <div className="flex items-center">
+              {/* Add the default comment icon */}
+              <Image
+                src="/comment.png"
+                alt="Comment icon"
+                width={50}
+                height={50}
+                className="mr-4 rounded"
+              />
+              <span className="flex-1">
+                {getUserName(comment.userId)} on {getMovieTitle(comment.movieId)} - "{comment.text}"
+              </span>
+            </div>
+            <div className="flex gap-2 flex-shrink-0">
+              <button onClick={() => handleEdit(comment)} className="btn bg-yellow-500">Edit</button>
               <button onClick={() => handleDelete(comment.id)} className="btn bg-red-500">Delete</button>
             </div>
           </li>

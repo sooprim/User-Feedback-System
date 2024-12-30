@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import Image from 'next/image'
 
 interface User {
   id: number
@@ -38,6 +39,14 @@ export default function UserList() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    // Validation: Ensure both name and surname are provided
+    const userToValidate = editingUser || newUser
+    if (!userToValidate.name.trim() || !userToValidate.surname.trim()) {
+      alert('Both first name and last name are required.')
+      return
+    }
+
     try {
       if (editingUser) {
         await axios.put(`http://localhost:5618/users/${editingUser.id}`, editingUser)
@@ -78,7 +87,7 @@ export default function UserList() {
             name="name"
             value={editingUser ? editingUser.name : newUser.name}
             onChange={handleInputChange}
-            placeholder="Name"
+            placeholder="First Name"
             className="w-full"
           />
         </div>
@@ -88,7 +97,7 @@ export default function UserList() {
             name="surname"
             value={editingUser ? editingUser.surname : newUser.surname}
             onChange={handleInputChange}
-            placeholder="Surname"
+            placeholder="Last Name"
             className="w-full"
           />
         </div>
@@ -106,7 +115,16 @@ export default function UserList() {
       <ul className="space-y-4">
         {users.map((user) => (
           <li key={user.id} className="flex justify-between items-center bg-white dark:bg-gray-700 p-4 rounded-lg shadow">
-            <span>{user.name} {user.surname}</span>
+            <div className="flex items-center">
+              <Image
+                src="/user.png"
+                alt="User icon"
+                width={50}
+                height={50}
+                className="mr-4 rounded"
+              />
+              <span>{user.name} {user.surname}</span>
+            </div>
             <div>
               <button onClick={() => handleEdit(user)} className="btn bg-yellow-500 mr-2">Edit</button>
               <button onClick={() => handleDelete(user.id)} className="btn bg-red-500">Delete</button>
@@ -117,4 +135,3 @@ export default function UserList() {
     </div>
   )
 }
-
