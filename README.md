@@ -1,6 +1,6 @@
 ## User Feedback System
 
-This project was made with Next.js, which is a react-based web application that also utilizes bootstrap, alongside using JSON server which simulates a backend. The goal of this application is to let you display, create, update, and delete users, movies, and comments. There is more explanation and instructions in the homepage of the app.
+This project was made with Next.js, which is a react-based web application that also utilizes bootstrap. I also used JSON server which simulates a backend. The goal of this application is to let you display, create, update, and delete users, movies, and comments. There is more explanation and instructions in the homepage of the app.
 
 ## Getting Started
 
