@@ -189,7 +189,7 @@ export default function CommentList() {
             className="flex justify-between items-start bg-white dark:bg-gray-700 p-4 rounded-lg shadow"
           >
             <div className="flex items-center">
-              {/* Add the default comment icon */}
+              {}
               <Image
                 src="/comment.png"
                 alt="Comment icon"
