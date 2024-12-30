@@ -29,6 +29,7 @@ export default function MovieList() {
     imageUrl: ''
   })
   const [users, setUsers] = useState<User[]>([])
+  const [editingMovieId, setEditingMovieId] = useState<string | null>(null)
 
   useEffect(() => {
     fetchMovies()
@@ -58,15 +59,6 @@ export default function MovieList() {
     setNewMovie({ ...newMovie, [name]: value })
   }
 
-  const isValidImageUrl = async (url: string): Promise<boolean> => {
-    try {
-      const response = await fetch(url, { method: 'HEAD' })
-      return response.ok
-    } catch {
-      return false
-    }
-  }
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!newMovie.userId) {
@@ -74,20 +66,27 @@ export default function MovieList() {
       return
     }
 
-    const imageUrl = newMovie.imageUrl
+    const formattedImageUrl = newMovie.imageUrl ? `/${newMovie.imageUrl}.png` : ''
 
-    if (imageUrl && !(await isValidImageUrl(imageUrl))) {
-      alert('Provide a valid image from /public')
+    // Validate the image existence
+    try {
+      const response = await fetch(formattedImageUrl, { method: 'HEAD' })
+      if (!response.ok) {
+        alert('Image not found in public folder')
+        return
+      }
+    } catch (error) {
+      console.error('Error checking image existence:', error)
+      alert('Image not found in public folder')
       return
     }
 
     try {
-      const movieToCreate = {
-        ...newMovie,
-        userId: newMovie.userId,
-        imageUrl: newMovie.imageUrl,
+      if (editingMovieId) {
+        await updateMovie(editingMovieId, formattedImageUrl)
+      } else {
+        await createMovie(formattedImageUrl)
       }
-      await axios.post('http://localhost:5618/movies', movieToCreate)
       setNewMovie({
         title: '',
         description: '',
@@ -95,10 +94,36 @@ export default function MovieList() {
         userId: '',
         imageUrl: ''
       })
+      setEditingMovieId(null)
       fetchMovies()
     } catch (error) {
       console.error('Error saving movie:', error)
     }
+  }
+
+  const createMovie = async (formattedImageUrl: string) => {
+    await axios.post('http://localhost:5618/movies', {
+      ...newMovie,
+      imageUrl: formattedImageUrl,
+    })
+  }
+
+  const updateMovie = async (id: string, formattedImageUrl: string) => {
+    await axios.put(`http://localhost:5618/movies/${id}`, {
+      ...newMovie,
+      imageUrl: formattedImageUrl,
+    })
+  }
+
+  const handleEdit = (movie: Movie) => {
+    setNewMovie({
+      title: movie.title,
+      description: movie.description,
+      rating: movie.rating,
+      userId: movie.userId,
+      imageUrl: movie.imageUrl ? movie.imageUrl.replace(/^\/|\.png$/g, '') : ''
+    })
+    setEditingMovieId(movie.id)
   }
 
   const handleDelete = async (id: string) => {
@@ -191,11 +216,11 @@ export default function MovieList() {
           name="imageUrl"
           value={newMovie.imageUrl}
           onChange={handleInputChange}
-          placeholder="Image URL (ex: /mario.png)"
+          placeholder="Image Name (e.g., mario)"
           className="w-full"
         />
         <button type="submit" className="btn">
-          Add Movie
+          {editingMovieId ? 'Update Movie' : 'Add Movie'}
         </button>
       </form>
       <ul className="space-y-4">
@@ -215,7 +240,8 @@ export default function MovieList() {
                 <p>Rating: {movie.rating}/10 ({getUserName(movie.userId)})</p>
               </div>
             </div>
-            <div>
+            <div className="flex space-x-2">
+              <button onClick={() => handleEdit(movie)} className="btn bg-blue-500">Edit</button>
               <button onClick={() => handleDelete(movie.id)} className="btn bg-red-500">Delete</button>
             </div>
           </li>

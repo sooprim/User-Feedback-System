@@ -23,11 +23,12 @@
   ],
   "movies": [
     {
-      "id": "fb2e",
       "title": "Batman",
       "description": "Vigilante saves Gotham City from danger",
       "rating": "9",
-      "userId": "e7da"
+      "userId": "ab65",
+      "imageUrl": "/batman.png",
+      "id": "fb2e"
     },
     {
       "id": "f52d",
