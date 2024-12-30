@@ -21,8 +21,13 @@ interface User {
 
 export default function MovieList() {
   const [movies, setMovies] = useState<Movie[]>([])
-  const [newMovie, setNewMovie] = useState({ title: '', description: '', rating: 1, userId: '', imageUrl: '' })
-  const [editingMovie, setEditingMovie] = useState<Movie | null>(null)
+  const [newMovie, setNewMovie] = useState({
+    title: '',
+    description: '',
+    rating: 1,
+    userId: '',
+    imageUrl: ''
+  })
   const [users, setUsers] = useState<User[]>([])
 
   useEffect(() => {
@@ -50,50 +55,50 @@ export default function MovieList() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target
-    if (editingMovie) {
-      setEditingMovie({ ...editingMovie, [name]: value })
-    } else {
-      setNewMovie({ ...newMovie, [name]: value })
+    setNewMovie({ ...newMovie, [name]: value })
+  }
+
+  const isValidImageUrl = async (url: string): Promise<boolean> => {
+    try {
+      const response = await fetch(url, { method: 'HEAD' })
+      return response.ok
+    } catch {
+      return false
     }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!newMovie.userId) {
-      alert("Please select a user")
+      alert('Please select a user')
+      return
+    }
+
+    const imageUrl = newMovie.imageUrl
+
+    if (imageUrl && !(await isValidImageUrl(imageUrl))) {
+      alert('Provide a valid image from /public')
       return
     }
 
     try {
-      if (editingMovie) {
-        const updatedMovie = {
-          ...editingMovie,
-          userId: editingMovie.userId,
-          imageUrl: editingMovie.imageUrl,
-        }
-        await axios.put(`http://localhost:5618/movies/${editingMovie.id}`, updatedMovie)
-        setEditingMovie(null)
-      } else {
-        const movieToCreate = {
-          ...newMovie,
-          userId: newMovie.userId,
-          imageUrl: newMovie.imageUrl,
-        }
-        await axios.post('http://localhost:5618/movies', movieToCreate)
+      const movieToCreate = {
+        ...newMovie,
+        userId: newMovie.userId,
+        imageUrl: newMovie.imageUrl,
       }
-      setNewMovie({ title: '', description: '', rating: 1, userId: '', imageUrl: '' })
+      await axios.post('http://localhost:5618/movies', movieToCreate)
+      setNewMovie({
+        title: '',
+        description: '',
+        rating: 1,
+        userId: '',
+        imageUrl: ''
+      })
       fetchMovies()
     } catch (error) {
       console.error('Error saving movie:', error)
     }
-  }
-
-  const handleEdit = (movie: Movie) => {
-    setEditingMovie(movie)
-  }
-
-  const handleCancelEdit = () => {
-    setEditingMovie(null)
   }
 
   const handleDelete = async (id: string) => {
@@ -112,20 +117,20 @@ export default function MovieList() {
 
   const getMovieImage = (title: string, imageUrl: string) => {
     if (imageUrl) {
-      return imageUrl; // Return custom image URL if provided
+      return imageUrl
     }
-    // Fallback logic based on movie title
+
     switch (title.toLowerCase()) {
       case 'mario':
-        return '/Mario-Icon.png'; // Default Mario image
+        return '/mario.png'
       case 'thor':
-        return '/Thor-Icon.png';
+        return '/thor.png'
       case 'batman':
-        return '/Batman-Icon.png';
+        return '/batman.png'
       case 'spiderman':
-        return '/Spiderman-Icon.png';
+        return '/spiderman.png'
       default:
-        return '/default-icon.png'; // Default fallback icon
+        return '/default.png'
     }
   }
 
@@ -135,7 +140,7 @@ export default function MovieList() {
         <input
           type="text"
           name="title"
-          value={editingMovie ? editingMovie.title : newMovie.title}
+          value={newMovie.title}
           onChange={handleInputChange}
           placeholder="Title"
           className="w-full"
@@ -144,7 +149,7 @@ export default function MovieList() {
         <input
           type="text"
           name="description"
-          value={editingMovie ? editingMovie.description : newMovie.description}
+          value={newMovie.description}
           onChange={handleInputChange}
           placeholder="Description"
           className="w-full"
@@ -155,7 +160,7 @@ export default function MovieList() {
           <input
             type="number"
             name="rating"
-            value={editingMovie ? editingMovie.rating : newMovie.rating}
+            value={newMovie.rating}
             onChange={handleInputChange}
             id="rating"
             className="w-20"
@@ -167,12 +172,14 @@ export default function MovieList() {
         </div>
         <select
           name="userId"
-          value={editingMovie ? editingMovie.userId : newMovie.userId}
+          value={newMovie.userId}
           onChange={handleInputChange}
           className="w-full"
           required
         >
-          <option value="">Select User</option>
+          <option value="" disabled>
+            Select User
+          </option>
           {users.map((user) => (
             <option key={user.id} value={user.id}>
               {user.name} {user.surname}
@@ -182,28 +189,21 @@ export default function MovieList() {
         <input
           type="text"
           name="imageUrl"
-          value={editingMovie ? editingMovie.imageUrl : newMovie.imageUrl}
+          value={newMovie.imageUrl}
           onChange={handleInputChange}
-          placeholder="Image URL (ex: /Mario-Icon.png)"
+          placeholder="Image URL (ex: /mario.png)"
           className="w-full"
         />
-        <div className="flex justify-between">
-          <button type="submit" className="btn">
-            {editingMovie ? 'Update Movie' : 'Add Movie'}
-          </button>
-          {editingMovie && (
-            <button type="button" onClick={handleCancelEdit} className="btn bg-gray-500">
-              Cancel
-            </button>
-          )}
-        </div>
+        <button type="submit" className="btn">
+          Add Movie
+        </button>
       </form>
       <ul className="space-y-4">
         {movies.map((movie) => (
           <li key={movie.id} className="flex justify-between items-center bg-white dark:bg-gray-700 p-4 rounded-lg shadow">
             <div className="flex items-center">
               <Image
-                src={getMovieImage(movie.title, movie.imageUrl || '')}  // Pass the image URL here
+                src={getMovieImage(movie.title, movie.imageUrl || '')}
                 alt={`${movie.title} icon`}
                 width={50}
                 height={50}
@@ -216,7 +216,6 @@ export default function MovieList() {
               </div>
             </div>
             <div>
-              <button onClick={() => handleEdit(movie)} className="btn bg-yellow-500 mr-2">Edit</button>
               <button onClick={() => handleDelete(movie.id)} className="btn bg-red-500">Delete</button>
             </div>
           </li>

@@ -50,12 +50,20 @@
       "userId": "ab65",
       "imageUrl": "/Mario-Icon.png",
       "id": "mH1JuYN"
+    },
+    {
+      "title": "new",
+      "description": "movie",
+      "rating": 1,
+      "userId": "ab65",
+      "imageUrl": "",
+      "id": "KkiWKZu"
     }
   ],
   "comments": [
     {
       "id": "6e26",
-      "text": "All my homies hate spiderman",
+      "text": "This was very nostalgic",
       "movieId": "708c",
       "userId": "efdf"
     },
