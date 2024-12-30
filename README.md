@@ -9,7 +9,6 @@ First, you will want to install the necessary dependencies:
 ```bash
 npm install
 npm install -g json-server
-npm install next@latest react@latest react-dom@latest
 ```
 Depending on your PC, you might need to install more dependencies. Then, you will run in one gitbash terminal:
 ```bash
