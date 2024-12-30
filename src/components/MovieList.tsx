@@ -155,7 +155,7 @@ export default function MovieList() {
       case 'spiderman':
         return '/spiderman.png'
       default:
-        return '/default.png'
+        return '/movie.png'
     }
   }
 
